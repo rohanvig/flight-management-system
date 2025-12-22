@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  user-service:
+    build: ./apps/user-service
+    ports:
+      - "4001:4001"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  auth-service:
+    build: ./apps/auth-service
+    ports:
+      - "4002:4002"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  booking-service:
+    build: ./apps/booking-service
+    ports:
+      - "4003:4003"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  payment-service:
+    build: ./apps/payment-service
+    ports:
+      - "4005:4005"
+    env_file:
+      - .env
+    depends_on:
+      - booking-service
+    restart: unless-stopped
+
+  gateway:
+    build: ./apps/gateway
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - auth-service
+      - booking-service
+      - payment-service
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
