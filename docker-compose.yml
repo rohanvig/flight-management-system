@@ -1,6 +1,18 @@
 version: "3.9"
 
 services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: flight_management_system
+      POSTGRES_USER: ldt
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
   mongo:
     image: mongo:latest
     container_name: mongo-db
@@ -62,3 +74,4 @@ services:
 
 volumes:
   mongo-data:
+  postgres-data:
