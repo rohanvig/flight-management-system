@@ -7,6 +7,7 @@ export interface BookingAttributes {
   bookingReference: string;
   userId?: string;
   status: "pending" | "confirmed" | "cancelled" | "failed";
+  flightId: string;
 
   outbound: FlightLeg;
   return?: FlightLeg;
@@ -50,6 +51,7 @@ export class Booking
   declare bookingReference: string;
   declare userId?: string;
   declare status: "pending" | "confirmed" | "cancelled" | "failed";
+  declare flightId: string;
 
   declare outbound: FlightLeg;
   declare return?: FlightLeg;
@@ -78,6 +80,10 @@ Booking.init(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+    },
+    flightId: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
 
     bookingReference: {
