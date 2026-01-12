@@ -9,7 +9,7 @@ export class BookingService {
     const booking = await Booking.create({
       ...data,
       userId,
-    });
+    } as BookingCreationAttributes);
 
     return booking;
   }

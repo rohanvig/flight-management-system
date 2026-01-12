@@ -10,7 +10,7 @@ const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/health", (req, res) => {
   res.json({ status: "OK", service: "auth-service (with refresh tokens)" });
 });
 

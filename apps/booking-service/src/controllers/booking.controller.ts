@@ -1,4 +1,3 @@
-// src/controllers/booking.controller.ts
 import type { Request, Response } from "express";
 import { bookingService } from "../services/booking.service.js";
 import jwt from "jsonwebtoken";
@@ -8,6 +7,7 @@ export class BookingController {
   create = async (req: Request, res: Response) => {
     try {
       const booking = await bookingService.create(req.body, req.user?.userId);
+
       res.status(201).json({ booking });
     } catch (err: any) {
       res.status(500).json({ message: err.message });

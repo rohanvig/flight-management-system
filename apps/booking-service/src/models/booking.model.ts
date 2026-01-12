@@ -1,4 +1,3 @@
-// import { Schema, model, Document } from "mongoose";
 import type { Passenger, Contact, FlightLeg } from "../types/index.js";
 import sequelize from "../config/db.js";
 import { DataTypes, Model, Optional } from "sequelize";
@@ -162,44 +161,3 @@ Booking.init(
     },
   }
 );
-
-// MongoDB schema definition (currently commented out)
-// const bookingSchema = new Schema<IBooking>({
-//   bookingReference: { type: String, unique: true },
-//   userId: { type: Schema.Types.ObjectId, ref: "User" },
-//   status: {
-//     type: String,
-//     enum: ["pending", "confirmed", "cancelled", "failed"],
-//     default: "pending"
-//   },
-
-//   outbound: { type: Object, required: true },
-//   return: Object,
-
-//   passengers: [{ type: Object, required: true }],
-//   contact: { type: Object, required: true },
-//   emergencyContact: Object,
-
-//   price: {
-//     base: { type: Number, required: true },
-//     taxes: { type: Number, required: true },
-//     extras: { type: Number, default: 0 },
-//     total: { type: Number, required: true },
-//     currency: { type: String, default: "USD" }
-//   },
-
-//   selectedSeats: { type: Schema.Types.Mixed },
-//   paymentIntentId: String,
-
-//   bookedAt: { type: Date, default: Date.now },
-//   expiresAt: { type: Date, default: () => new Date(Date.now() + 30 * 60 * 1000) }
-// });
-
-// bookingSchema.pre("save", function (next) {
-//   if (!this.bookingReference) {
-//     this.bookingReference = "TPM" + Math.random().toString(36).substring(2, 8).toUpperCase();
-//   }
-//   next();
-// });
-
-// export const Booking = model<IBooking>("Booking", bookingSchema);
