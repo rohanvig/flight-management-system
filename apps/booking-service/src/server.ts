@@ -13,10 +13,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-(async function () {
-  await connectDB();
-})();
-
+await connectDB();
 await connectRedis();
 
 const bookingCtrl = new BookingController();

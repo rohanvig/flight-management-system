@@ -23,4 +23,6 @@ app.get("/me", (req, res) => {
   controller.me(req, res);
 });
 
-app.listen(4001, () => {});
+app.listen(4001, () => {
+  console.log("User Service running on port 4001");
+});

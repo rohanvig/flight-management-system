@@ -9,7 +9,8 @@ export class BookingService {
     const seats = Object.keys(data.selectedSeats || {});
 
     const lockKeys = seats.map(
-      (seat) => `booking:lock:flight:${data.flightId}:seat:${seat}`
+      (seat) =>
+        `booking:lock:flight:${data.outbound?.flightNumber}:seat:${seat}`
     );
     const acquiredLocks: string[] = [];
 

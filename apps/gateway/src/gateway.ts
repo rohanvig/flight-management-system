@@ -36,4 +36,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => {});
+app.listen(PORT, () => {
+  console.log(`Gateway running on port ${PORT}`);
+});

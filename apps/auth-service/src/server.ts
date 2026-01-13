@@ -64,4 +64,6 @@ app.post("/api/token/refresh", (req, res) => {
   }
 });
 
-app.listen(4002, () => {});
+app.listen(4002, () => {
+  console.log(`Auth Service running on port  4002`);
+});
