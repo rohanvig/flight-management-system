@@ -11,6 +11,8 @@ const PAYMENT_SERVICE_URL =
   process.env.PAYMENT_SERVICE_URL! || "http://payment-service:4005";
 const USER_SERVICE_URL =
   process.env.USER_SERVICE_URL! || "http://user-service:4001";
+const FLIGHT_SERVICE_URL =
+  process.env.FLIGHT_SERVICE_URL! || "http://flight-service:4004";
 const app = express();
 
 app.use(cors());
@@ -26,6 +28,12 @@ app.use(
   "/api/payments",
   authenticate,
   createServiceProxy(PAYMENT_SERVICE_URL, "/api/payments")
+);
+
+app.use(
+  "/api/flights",
+  authenticate,
+  createServiceProxy(FLIGHT_SERVICE_URL, "/api/flights")
 );
 
 app.get("/", (req, res) => {

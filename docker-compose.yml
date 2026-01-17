@@ -62,6 +62,18 @@ services:
       REDIS_PORT: 6379
     restart: unless-stopped
 
+  flight-service:
+    build: ./apps/flight-service
+    ports:
+      - "4004:4004"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+    restart: unless-stopped
+
   payment-service:
     build: ./apps/payment-service
     ports:
