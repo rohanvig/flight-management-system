@@ -6,16 +6,15 @@ import cors from "cors";
 import helmet from "helmet";
 import { connectDB } from "./config/db.js";
 import { BookingController } from "./controllers/booking.controller.js";
-
+import { connectRedis } from "./infra/redis/client.js";
 const app = express();
 
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-(async function () {
-  await connectDB();
-})();
+await connectDB();
+await connectRedis();
 
 const bookingCtrl = new BookingController();
 

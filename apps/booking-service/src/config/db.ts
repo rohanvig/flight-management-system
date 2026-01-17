@@ -1,11 +1,13 @@
 import { Sequelize } from "sequelize";
-import "dotenv/config";
+import { config } from "dotenv";
+
+config();
 
 const sequelize = new Sequelize({
-  database: process.env.DB_NAME,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD || undefined,
-  host: process.env.DB_HOST,
+  database: process.env.POSTGRES_DB || "flight_db",
+  username: process.env.POSTGRES_USER || "booking_user",
+  password: process.env.POSTGRES_PASSWORD || "strongpassword",
+  host: process.env.DB_HOST || "localhost",
   dialect: "postgres",
   logging: false,
 });

@@ -3,15 +3,41 @@ import type {
   BookingAttributes,
   BookingCreationAttributes,
 } from "../models/booking.model.js";
-
+import { lockService } from "../infra/redis/lock.js";
 export class BookingService {
   async create(data: Partial<BookingCreationAttributes>, userId?: string) {
-    const booking = await Booking.create({
-      ...data,
-      userId,
-    } as BookingCreationAttributes);
+    const seats = Object.keys(data.selectedSeats || {});
 
-    return booking;
+    const lockKeys = seats.map(
+      (seat) =>
+        `booking:lock:flight:${data.outbound?.flightNumber}:seat:${seat}`
+    );
+    const acquiredLocks: string[] = [];
+
+    for (const key of lockKeys) {
+      const locked = await lockService.acquire(key);
+      if (!locked) {
+        for (const l of acquiredLocks) {
+          await lockService.release(l);
+        }
+        throw new Error(`Seat ${key} is currently locked`);
+      }
+      acquiredLocks.push(key);
+    }
+
+    try {
+      const booking = await Booking.create({
+        ...data,
+        userId,
+      } as BookingCreationAttributes);
+      return booking;
+    } catch (error) {
+      throw error;
+    } finally {
+      for (const key of acquiredLocks) {
+        await lockService.release(key);
+      }
+    }
   }
 
   async confirm(bookingRef: string, paymentIntentId: string) {

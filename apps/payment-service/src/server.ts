@@ -23,4 +23,6 @@ app.get("/", (_req, res) => {
   res.json({ status: "OK", service: "payment-service (INR + Webhook Fixed)" });
 });
 
-app.listen(4005, () => {});
+app.listen(4005, () => {
+  console.log("Payment Service running on port 4005");
+});
