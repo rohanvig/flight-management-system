@@ -10,7 +10,7 @@ export class BookingService {
 
     const lockKeys = seats.map(
       (seat) =>
-        `booking:lock:flight:${data.outbound?.flightNumber}:seat:${seat}`
+        `booking:lock:flight:${data.outbound?.flightNumber}:seat:${seat}`,
     );
     const acquiredLocks: string[] = [];
 
@@ -51,7 +51,7 @@ export class BookingService {
           bookingReference: bookingRef,
           status: "pending",
         },
-      }
+      },
     );
 
     if (updatedCount === 0) return null;
@@ -79,7 +79,7 @@ export class BookingService {
       { selectedSeats: seats },
       {
         where: { bookingReference: bookingRef },
-      }
+      },
     );
 
     if (updatedCount === 0) return null;
