@@ -72,6 +72,16 @@ services:
       - booking-service
     restart: unless-stopped
 
+  flight-service:
+    build: ./apps/flight-service
+    ports:
+      - "4004:4004"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
   gateway:
     build: ./apps/gateway
     ports:
@@ -80,6 +90,7 @@ services:
       - .env
     depends_on:
       - auth-service
+      - flight-service
       - booking-service
       - payment-service
     restart: unless-stopped

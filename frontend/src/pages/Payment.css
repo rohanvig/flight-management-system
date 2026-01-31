@@ -1,0 +1,124 @@
+.payment-page {
+    padding: var(--spacing-2xl) 0;
+    min-height: calc(100vh - 100px);
+}
+
+.payment-card {
+    padding: var(--spacing-xl);
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.payment-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-xs);
+}
+
+.payment-summary {
+    background: var(--color-surface);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-secondary);
+}
+
+.summary-row:last-child {
+    margin-bottom: 0;
+}
+
+.reference-code {
+    font-family: monospace;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+}
+
+.total-row {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+}
+
+.amount {
+    color: var(--color-primary);
+}
+
+.payment-form-mock {
+    margin-bottom: var(--spacing-xl);
+}
+
+.card-mock {
+    border: 1px solid var(--color-border);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.02);
+    margin-top: var(--spacing-md);
+}
+
+.card-input {
+    margin-bottom: var(--spacing-md);
+}
+
+.card-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.card-input label {
+    display: block;
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-secondary);
+}
+
+.card-input input {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+}
+
+.mock-note {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-sm);
+    text-align: center;
+}
+
+.payment-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+    gap: var(--spacing-md);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-sm);
+    animation: slideUp 0.5s ease-out;
+}
+
+.redirect-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-lg);
+}
