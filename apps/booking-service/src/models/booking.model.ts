@@ -44,8 +44,7 @@ export type BookingCreationAttributes = Optional<
 
 export class Booking
   extends Model<BookingAttributes, BookingCreationAttributes>
-  implements BookingAttributes
-{
+  implements BookingAttributes {
   declare id: string;
   declare bookingReference: string;
   declare userId?: string;

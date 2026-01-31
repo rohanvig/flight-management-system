@@ -4,25 +4,25 @@ dotenv.config();
 
 module.exports = {
     development: {
-        username: process.env.DB_USER || 'booking_user',
-        password: process.env.DB_PASS || 'strongpassword',
-        database: process.env.DB_NAME || 'flight_db',
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || 5432,
+        username: process.env.POSTGRES_USER || 'booking_user',
+        password: process.env.POSTGRES_PASSWORD || 'strongpassword',
+        database: process.env.POSTGRES_DB || 'flight_db',
+        host: process.env.POSTGRES_HOST || 'localhost',
+
         dialect: 'postgres',
     },
     test: {
-        username: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME,
-        host: process.env.DB_HOST,
+        username: process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DB,
+        host: process.env.POSTGRES_HOST,
         dialect: 'postgres',
     },
     production: {
-        username: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME,
-        host: process.env.DB_HOST,
+        username: process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DB,
+        host: process.env.POSTGRES_HOST,
         dialect: 'postgres',
     },
 };
