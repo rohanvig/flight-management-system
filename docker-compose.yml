@@ -84,6 +84,7 @@ services:
       - booking-service
     restart: unless-stopped
 
+
   gateway:
     build: ./apps/gateway
     ports:
@@ -92,6 +93,7 @@ services:
       - .env
     depends_on:
       - auth-service
+      - flight-service
       - booking-service
       - payment-service
     restart: unless-stopped

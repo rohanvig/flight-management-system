@@ -1,0 +1,220 @@
+.booking-page {
+    padding: var(--spacing-xl) 0;
+    min-height: calc(100vh - 100px);
+}
+
+/* Steps Indicator */
+.steps-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex: 1;
+}
+
+.step-item:last-child {
+    flex: 0;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    z-index: 1;
+    transition: all var(--transition-base);
+}
+
+.step-label {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Active/Completed States */
+.step-item.active .step-circle {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.step-item.active .step-label {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+.step-item.completed .step-circle {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+}
+
+.step-item.completed .step-line {
+    background: var(--color-primary);
+}
+
+/* Form Styling */
+.section-heading {
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-xl);
+}
+
+.passenger-card {
+    margin-bottom: var(--spacing-lg);
+}
+
+.passenger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-xl);
+}
+
+/* Review Step */
+.review-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+}
+
+.card-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-primary);
+}
+
+.flight-summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.flight-route-simple {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.arrow {
+    color: var(--color-primary);
+}
+
+.flight-times {
+    display: flex;
+    gap: var(--spacing-xl);
+}
+
+.time-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-block .label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.time-block .value {
+    font-size: var(--font-size-lg);
+}
+
+.passengers-review {
+    margin-top: var(--spacing-lg);
+}
+
+.passenger-item-review {
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.passenger-item-review:last-child {
+    border-bottom: none;
+}
+
+.p-name {
+    display: block;
+    font-weight: var(--font-weight-medium);
+}
+
+.p-details {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+/* Price Summary Sidebar */
+.price-summary {
+    position: sticky;
+    top: 100px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    color: var(--color-text-secondary);
+}
+
+.price-total {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-md) 0;
+    margin-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .price-summary {
+        position: static;
+    }
+}

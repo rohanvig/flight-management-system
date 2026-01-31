@@ -20,6 +20,10 @@ app.use(morgan("combined"));
 
 app.use("/api/auth", createServiceProxy(USER_SERVICE_URL, "/api/auth"));
 app.use(
+  "/api/flights",
+  createServiceProxy(FLIGHT_SERVICE_URL, "/api/flights")
+);
+app.use(
   "/api/bookings",
   authenticate,
   createServiceProxy(Booking_SERVICE_URL, "/api/bookings")
