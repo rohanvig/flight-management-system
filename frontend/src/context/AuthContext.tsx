@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const response: AuthResponse = await authApi.login(credentials);
 
             // Store token and user
-            storage.set('authToken', response.token);
+            storage.set('authToken', response.accessToken);
             storage.set('user', response.user);
             setUser(response.user);
         } catch (error) {
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const response: AuthResponse = await authApi.register(data);
 
             // Store token and user
-            storage.set('authToken', response.token);
+            storage.set('authToken', response.accessToken);
             storage.set('user', response.user);
             setUser(response.user);
         } catch (error) {

@@ -1,5 +1,6 @@
 import apiClient from './client';
 import { LoginCredentials, RegisterData, AuthResponse, User } from '@/types/auth.types';
+import { storage } from '@/utils/storage';
 
 export const authApi = {
     // Login user
@@ -16,13 +17,18 @@ export const authApi = {
 
     // Get current user profile
     getMe: async (): Promise<User> => {
-        const response = await apiClient.get<User>('/api/auth/me');
+        const user = storage.get<User>('user');
+        const response = await apiClient.get<User>('/api/auth/me', {
+            params: {
+                userId: user?.id,
+            }
+        });
         return response.data;
     },
 
     // Logout (client-side only)
     logout: () => {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
+        storage.remove('authToken');
+        storage.remove('user');
     },
 };

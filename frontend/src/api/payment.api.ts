@@ -9,11 +9,11 @@ export const paymentApi = {
     // Create payment intent
     createPaymentIntent: async (
         amount: number,
-        bookingReference: string
+        bookingRef: string
     ): Promise<PaymentIntentResponse> => {
         const response = await apiClient.post<PaymentIntentResponse>('/api/payments/create', {
             amount,
-            bookingReference,
+            bookingRef,
         });
         return response.data;
     },

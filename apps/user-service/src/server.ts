@@ -19,9 +19,7 @@ app.get("/health", (req, res) => {
 
 app.post("/register", controller.register);
 app.post("/login", controller.login);
-app.get("/me", (req, res) => {
-  controller.me(req, res);
-});
+app.get("/me", controller.me);
 
 app.listen(4001, () => {
   console.log("User Service running on port 4001");

@@ -21,8 +21,24 @@ export class UserService {
       role: "user",
     });
 
-    const { password: _, ...safeUser } = user;
-    return safeUser;
+    try {
+      // Call auth-service for token generation
+      const response = await axios.post(
+        `${AUTH_SERVICE_URL}/api/token/generate`,
+        {
+          userId: user.id,
+          role: user.role || "user",
+        }
+      );
+
+      const { accessToken } = response.data;
+      const { password: _, ...safeUser } = user.get({ plain: true });
+      return { user: safeUser, accessToken };
+    } catch (err: any) {
+      console.error("Auth service error during registration:", err.message);
+      // Even if token generation fails, user is created. But for UX we return error.
+      throw new Error("User created but failed to generate session. Please login.");
+    }
   }
 
   async login(input: LoginInput) {
@@ -47,7 +63,7 @@ export class UserService {
 
       const { accessToken } = response.data;
 
-      const { password: _, ...safeUser } = user;
+      const { password: _, ...safeUser } = user.get({ plain: true });
       return { user: safeUser, accessToken };
     } catch (err: any) {
       console.error("Auth service error:", err.message);

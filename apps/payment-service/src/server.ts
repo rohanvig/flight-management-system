@@ -11,10 +11,10 @@ app.use(express.json());
 
 const stripeCtrl = new StripeController();
 
-app.post("/create", stripeCtrl.createPaymentIntent);
+app.post("/api/payments/create", stripeCtrl.createPaymentIntent);
 
 app.post(
-  "/webhook/stripe",
+  "/api/payments/webhook/stripe",
   express.raw({ type: "application/json" }),
   stripeCtrl.handleWebhook
 );

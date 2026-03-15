@@ -18,7 +18,7 @@ const STEPS = ['Passenger Details', 'Review Booking', 'Payment'];
 export const BookingFlow: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
 
     const [currentStep, setCurrentStep] = useState(0);
     const [flight, setFlight] = useState<Flight | null>(null);
@@ -101,16 +101,53 @@ export const BookingFlow: React.FC = () => {
 
         setSubmitting(true);
         try {
-            const bookingData: CreateBookingData = {
-                flightId: flight.id,
-                passengers,
-                seats: [], // Seat selection can be added here if implemented
+            // Align with backend BookingAttributes
+            const bookingData = {
+                outbound: {
+                    flightNumber: flight.flightNumber,
+                    airline: flight.airline,
+                    airlineCode: flight.airline, // Fallback
+                    departure: { 
+                        airport: flight.origin, 
+                        dateTime: flight.departureTime 
+                    },
+                    arrival: { 
+                        airport: flight.destination, 
+                        dateTime: flight.arrivalTime 
+                    },
+                    duration: String(flight.duration),
+                    stops: 0,
+                    cabinClass: flight.class
+                },
+                passengers: passengers.map(p => ({
+                    type: "adult",
+                    title: p.gender === 'male' ? 'Mr' : 'Ms',
+                    firstName: p.firstName,
+                    lastName: p.lastName,
+                    dateOfBirth: p.dateOfBirth,
+                    gender: p.gender,
+                    passportNumber: p.passportNumber
+                })),
+                contact: {
+                    email: user?.email || '',
+                    phone: '0000000000', // Backend requires contact
+                    countryCode: '+91'
+                },
+                price: {
+                    base: flight.price * passengers.length,
+                    taxes: Math.round(flight.price * 0.1 * passengers.length),
+                    extras: 0,
+                    total: Math.round(flight.price * 1.1 * passengers.length),
+                    currency: 'INR'
+                }
             };
 
-            const response = await bookingApi.createBooking(bookingData);
+            const response = await bookingApi.createBooking(bookingData as any);
 
             // Navigate to payment page with booking reference
-            navigate(`/payment/${response.reference}`);
+            // The response matches BookingResponse { booking: Booking, reference: string }
+            const reference = response.reference || response.booking.reference || (response.booking as any).bookingReference;
+            navigate(`/payment/${reference}`);
         } catch (err: any) {
             setError(err.message || 'Failed to create booking');
             setSubmitting(false);

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
 import './Home.css';
 
 export const Home: React.FC = () => {
+    const { isAuthenticated } = useAuth();
+
     return (
         <div className="home-page">
             {/* Hero Section */}
@@ -24,9 +27,9 @@ export const Home: React.FC = () => {
                                     Search Flights
                                 </Button>
                             </Link>
-                            <Link to="/register">
+                            <Link to={isAuthenticated ? "/flights" : "/register"}>
                                 <Button variant="outline" size="lg">
-                                    Get Started
+                                    {isAuthenticated ? "Search Now" : "Get Started"}
                                 </Button>
                             </Link>
                         </div>

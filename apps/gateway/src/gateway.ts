@@ -18,7 +18,12 @@ const app = express();
 app.use(cors());
 app.use(morgan("combined"));
 
-app.use("/api/auth", createServiceProxy(USER_SERVICE_URL, "/api/auth"));
+// Special handling for auth routes
+app.use("/api/auth/login", createServiceProxy(USER_SERVICE_URL, "/api/auth/login"));
+app.use("/api/auth/register", createServiceProxy(USER_SERVICE_URL, "/api/auth/register"));
+app.use("/api/auth/me", authenticate, createServiceProxy(USER_SERVICE_URL, "/api/auth/me"));
+
+// Other service routes
 app.use(
   "/api/flights",
   createServiceProxy(FLIGHT_SERVICE_URL, "/api/flights")
@@ -34,12 +39,6 @@ app.use(
   createServiceProxy(PAYMENT_SERVICE_URL, "/api/payments")
 );
 
-app.use(
-  "/api/flights",
-  authenticate,
-  createServiceProxy(FLIGHT_SERVICE_URL, "/api/flights")
-);
-
 app.get("/", (req, res) => {
   res.json({
     status: "Gateway is running",
@@ -47,7 +46,7 @@ app.get("/", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Gateway running on port ${PORT}`);
 });
