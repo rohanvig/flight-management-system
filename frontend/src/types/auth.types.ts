@@ -20,6 +20,6 @@ export interface RegisterData {
 }
 
 export interface AuthResponse {
-    token: string;
+    accessToken: string;
     user: User;
 }

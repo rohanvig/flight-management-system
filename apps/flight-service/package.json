@@ -7,9 +7,9 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "migrate": "npx sequelize-cli db:migrate",
-    "seed": "npx sequelize-cli db:seed:all",
-    "seed:undo": "npx sequelize-cli db:seed:undo:all"
+    "migrate": "npx sequelize-cli db:migrate --config src/config/cli_config.cjs --migrations-path src/migrations",
+    "seed": "npx sequelize-cli db:seed:all --config src/config/cli_config.cjs --seeders-path src/seeders",
+    "seed:undo": "npx sequelize-cli db:seed:undo:all --config src/config/cli_config.cjs --seeders-path src/seeders"
   },
   "dependencies": {
     "cors": "^2.8.5",

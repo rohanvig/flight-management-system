@@ -35,7 +35,14 @@ export const authenticate = async (
     );
 
     if (response.data.valid) {
-      (req as AuthenticatedRequest).user = response.data.payload;
+      const payload = response.data.payload;
+      (req as AuthenticatedRequest).user = payload;
+      
+      // Pass user info to downstream services via headers
+      req.headers["x-user-id"] = String(payload.userId);
+      req.headers["x-user-role"] = payload.role;
+      req.headers["x-user-email"] = payload.email;
+      
       next();
     } else {
       return res.status(401).json({ message: "Invalid token" });

@@ -22,11 +22,11 @@ app.get("/health", (_req, res) => {
   res.json({ status: "OK", service: "booking-service (TypeScript + ESM)" });
 });
 
-app.post("/create", bookingCtrl.create);
-app.get("/refrence/:ref", bookingCtrl.getByRef);
-app.post("confirm/:ref", bookingCtrl.confirm);
-app.get("/mybookings", bookingCtrl.getMyBookings);
-app.patch("/:ref/seats", bookingCtrl.updateSeats);
+app.post("/api/bookings/create", bookingCtrl.create);
+app.get("/api/bookings/refrence/:ref", bookingCtrl.getByRef);
+app.post("/api/bookings/confirm/:ref", bookingCtrl.confirm);
+app.get("/api/bookings/mybookings", bookingCtrl.getMyBookings);
+app.patch("/api/bookings/:ref/seats", bookingCtrl.updateSeats);
 
 // POST/api/bookings/create               Receive all data → create pending booking
 // POST/api/bookings/:ref/confirm         After payment success → mark as confirmed

@@ -2,9 +2,58 @@ import { Op } from 'sequelize';
 import { Flight, Airport, Aircraft, Schedule } from '../models/index.js';
 
 export class FlightService {
+    private mapFlightToDto(flight: any) {
+        // Ensure we handle both Sequelize instances and plain objects
+        const data = typeof flight.get === 'function' ? flight.get({ plain: true }) : flight;
+        
+        const departureAirport = data.departureAirport;
+        const arrivalAirport = data.arrivalAirport;
+        const schedules = Array.isArray(data.schedules) ? data.schedules : [];
+        const earliestSchedule = schedules.length
+            ? schedules.reduce((earliest: any, current: any) => {
+                const earliestTime = new Date(earliest.departure_time).getTime();
+                const currentTime = new Date(current.departure_time).getTime();
+                return currentTime < earliestTime ? current : earliest;
+            })
+            : null;
+
+        const departureTime = earliestSchedule?.departure_time ?? null;
+        const arrivalTime = earliestSchedule?.arrival_time ?? null;
+        const duration = departureTime && arrivalTime
+            ? Math.max(
+                0,
+                Math.round(
+                    (new Date(arrivalTime).getTime() - new Date(departureTime).getTime()) / (1000 * 60)
+                )
+            )
+            : 0;
+
+        // Log for debugging if ID is missing or undefined
+        if (!data.id) {
+            console.warn('[Flight Mapping] Flight ID is missing for flight:', data.flight_number);
+        }
+
+        return {
+            id: data.id ? String(data.id) : 'N/A',
+            flightNumber: data.flight_number || 'N/A',
+            airline: data.aircraft?.manufacturer ?? 'Unknown Airline',
+            origin: departureAirport?.code ?? '',
+            destination: arrivalAirport?.code ?? '',
+            departureTime,
+            arrivalTime,
+            duration,
+            price: data.base_price ? Number(data.base_price) : 0,
+            availableSeats: data.aircraft?.capacity_economy ?? 0,
+            class: 'economy'
+        };
+    }
 
     async searchFlights(params: any) {
-        const { from, to, date, minPrice, maxPrice } = params;
+        const from = params.from ?? params.origin;
+        const to = params.to ?? params.destination;
+        const date = params.date ?? params.departureDate;
+        const minPrice = params.minPrice;
+        const maxPrice = params.maxPrice;
 
         const whereClause: any = {
             status: 'scheduled'
@@ -16,13 +65,6 @@ export class FlightService {
             whereClause.base_price = { [Op.gte]: minPrice };
         } else if (maxPrice) {
             whereClause.base_price = { [Op.lte]: maxPrice };
-        }
-
-        // Filter by Airports
-        if (from || to) {
-            // This is slightly complex because relations are on ID, but search is usually by Code being passed or ID.
-            // Assuming headers logic or lookup happens before, OR we include checking the included model.
-            // Easiest is to filter inside the 'include' but Sequelize filtering on included models with 'required: true' performs an inner join.
         }
 
         const includeOptions: any[] = [
@@ -51,21 +93,25 @@ export class FlightService {
                         [Op.lt]: new Date(new Date(date).setDate(new Date(date).getDate() + 1))
                     }
                 } : undefined,
-                required: !!date // If date is provided, we only want flights having schedules on that date
+                required: !!date 
             }
         ];
 
-        return await Flight.findAll({
+        const flightsList = await Flight.findAll({
             where: whereClause,
             include: includeOptions,
-            order: [
-                ['base_price', 'ASC']
-            ]
+            order: [['base_price', 'ASC']]
         });
+
+        const mappedFlights = flightsList.map((flight: any) => this.mapFlightToDto(flight));
+        return {
+            flights: mappedFlights,
+            total: mappedFlights.length
+        };
     }
 
     async getFlightById(id: number) {
-        return await Flight.findByPk(id, {
+        const flight = await Flight.findByPk(id, {
             include: [
                 { model: Airport, as: 'departureAirport' },
                 { model: Airport, as: 'arrivalAirport' },
@@ -73,6 +119,12 @@ export class FlightService {
                 { model: Schedule, as: 'schedules' }
             ]
         });
+
+        if (!flight) {
+            return null;
+        }
+
+        return this.mapFlightToDto(flight);
     }
 
     async createFlight(data: any) {

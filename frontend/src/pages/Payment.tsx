@@ -43,14 +43,15 @@ export const Payment: React.FC = () => {
         setPaymentStep('processing');
 
         try {
-            // 1. Create payment intent (simulated or real)
-            await paymentApi.createPaymentIntent(booking.totalAmount, booking.reference);
+            // Use correct property names for payment API
+            const bookingRef = booking.reference || (booking as any).bookingReference;
+            await paymentApi.createPaymentIntent(booking.totalAmount || (booking as any).price?.total, bookingRef);
 
             // Simulate payment processing time
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             // 2. Confirm booking
-            await bookingApi.confirmBooking(booking.reference);
+            await bookingApi.confirmBooking(bookingRef);
 
             setPaymentStep('success');
             setProcessing(false);

@@ -7,22 +7,24 @@ import { lockService } from "../infra/redis/lock.js";
 export class BookingService {
   async create(data: Partial<BookingCreationAttributes>, userId?: string) {
     const seats = Object.keys(data.selectedSeats || {});
-
-    const lockKeys = seats.map(
-      (seat) =>
-        `booking:lock:flight:${data.outbound?.flightNumber}:seat:${seat}`,
-    );
     const acquiredLocks: string[] = [];
 
-    for (const key of lockKeys) {
-      const locked = await lockService.acquire(key);
-      if (!locked) {
-        for (const l of acquiredLocks) {
-          await lockService.release(l);
+    if (seats.length > 0) {
+      const lockKeys = seats.map(
+        (seat) =>
+          `booking:lock:flight:${data.outbound?.flightNumber}:seat:${seat}`,
+      );
+      
+      for (const key of lockKeys) {
+        const locked = await lockService.acquire(key);
+        if (!locked) {
+          for (const l of acquiredLocks) {
+            await lockService.release(l);
+          }
+          throw new Error(`Seat ${key} is currently locked`);
         }
-        throw new Error(`Seat ${key} is currently locked`);
+        acquiredLocks.push(key);
       }
-      acquiredLocks.push(key);
     }
 
     try {

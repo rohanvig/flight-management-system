@@ -41,9 +41,9 @@ export const Profile: React.FC = () => {
 
                 <Card variant="glass" className="profile-card">
                     <div className="profile-header">
-                        <div className="profile-avatar">
+                        {/* <div className="profile-avatar">
                             {user.name.charAt(0).toUpperCase()}
-                        </div>
+                        </div> */}
                         <div className="profile-title">
                             <h2>{user.name}</h2>
                             <span className="profile-email">{user.email}</span>

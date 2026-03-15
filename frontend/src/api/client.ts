@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ApiError } from '@/types/api.types';
+import { storage } from '@/utils/storage';
 
 const API_BASE_URL = import.meta.env.VITE_API_GATEWAY_URL || 'http://localhost:3000';
 
@@ -15,7 +16,7 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor - attach JWT token
 apiClient.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('authToken');
+        const token = storage.get<string>('authToken');
 
         if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -56,9 +57,16 @@ apiClient.interceptors.response.use(
 
             // Handle 401 Unauthorized - clear token and redirect to login
             if (error.response.status === 401) {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('user');
-                window.location.href = '/login';
+                storage.remove('authToken');
+                storage.remove('user');
+                
+                // Avoid redirecting if we're already on the login page or if it's a login request
+                const isLoginRequest = error.config?.url?.includes('/auth/login');
+                const isLoginPage = window.location.pathname === '/login';
+                
+                if (!isLoginRequest && !isLoginPage) {
+                    window.location.href = '/login';
+                }
             }
         } else if (error.request) {
             // Request made but no response
